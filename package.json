@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "jest": "jest ./src/lib",
+    "test": "jest ./src/lib",
     "deploy-local": "tsc && yalc publish --push"
   },
   "dependencies": {
