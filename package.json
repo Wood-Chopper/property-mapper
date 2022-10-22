@@ -1,9 +1,13 @@
 {
   "name": "@woodchopper/property-mapper",
-  "description": "Again another solution for mapping structures in Node projects. But this time a better one.",
+  "description": "Again another solution for mapping structures in Node projects. But this time an easier one because is uses decorators.",
   "version": "0.0.1",
   "main": "index.js",
   "author": "navez.jerome@gmail.com",
+  "homepage": "https://github.com/Wood-Chopper/property-mapper",
+  "bugs": {
+    "url": "https://github.com/Wood-Chopper/property-mapper/issues"
+  },
   "scripts": {
     "build": "tsc",
     "jest": "jest ./src/lib",
