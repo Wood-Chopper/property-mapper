@@ -1,0 +1,37 @@
+{
+  "name": "@woodchopper/property-mapper",
+  "description": "Again another solution for mapping structures in Node projects. But this time a better one.",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "navez.jerome@gmail.com",
+  "scripts": {
+    "build": "tsc",
+    "jest": "jest ./src/lib",
+    "deploy-local": "tsc && yalc publish --push"
+  },
+  "dependencies": {
+    "jsonpath-plus": "7.2.0",
+    "rxjs": "7.5.0",
+    "ts-jest": "29.0.3",
+    "ts-node": "10.9.1"
+  },
+  "devDependencies": {
+    "@types/jest": "27.4.1",
+    "jest": "27.5.1",
+    "jest-config": "28.1.0",
+    "typescript": "4.6.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wood-Chopper/property-mapper"
+  },
+  "keywords": [
+    "property",
+    "mapper",
+    "property-mapper",
+    "mapstruct",
+    "data structure",
+    "mapping"
+  ],
+  "license": "MIT"
+}
