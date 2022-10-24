@@ -1,4 +1,4 @@
-import {PostArrayMapping, ClassMapping, PostDateMapping, PostIgnore, PostMapping} from "./decotator";
+import {PostArrayMapping, ClassMapping, PostDateMapping, PostIgnore, PostMapping} from "./decorator";
 import {Observable, of} from "rxjs";
 import {AbstractMapper} from "./abstract-mapper";
 

@@ -1,0 +1,30 @@
+{
+  "name": "@woodchopper/property-mapper",
+  "description": "Again another solution for mapping structures in Node projects. But this time an easier one because is uses decorators.",
+  "version": "0.0.1",
+  "author": "navez.jerome@gmail.com",
+  "homepage": "https://github.com/Wood-Chopper/property-mapper",
+  "bugs": {
+    "url": "https://github.com/Wood-Chopper/property-mapper/issues"
+  },
+  "dependencies": {
+    "jsonpath-plus": "7.2.0",
+    "rxjs": "^7.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wood-Chopper/property-mapper"
+  },
+  "keywords": [
+    "property",
+    "mapper",
+    "property-mapper",
+    "mapstruct",
+    "data structure",
+    "mapping"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts"
+}

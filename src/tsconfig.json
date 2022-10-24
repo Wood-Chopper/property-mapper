@@ -1,0 +1,22 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "strict": true,
+    "declaration": true,
+    "experimentalDecorators": true,
+    "target": "es2021",
+    "module": "ES2020",
+    "esModuleInterop": true,
+    "lib": [
+      "es2020",
+      "dom"
+    ],
+    "moduleResolution": "node"
+  },
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.js"
+  ]
+}
