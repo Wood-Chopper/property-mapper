@@ -4,6 +4,7 @@
     "test": "jest ./src/lib",
     "deploy-local": "cd src && tsc && cpx package.json dist && cd dist && yalc publish --push"
   },
+  "author": "navez.jerome@gmail.com",
   "devDependencies": {
     "@types/jest": "27.4.1",
     "jest": "27.5.1",

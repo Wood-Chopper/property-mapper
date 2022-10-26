@@ -1,4 +1,4 @@
-import {AbstractMapper} from "./abstract-mapper";
+import {AbstractMapper} from "./abstract-mapper.js";
 
 export type ConcreteMapperType = {new(...args: any[]): AbstractMapper<any, any>};
 export type ConcreteMapper = AbstractMapper<any, any>;
@@ -48,25 +48,25 @@ type EMPTY = never | '' | '$' | string[] | null | undefined;
 
 type NoRemove = { remove?: never }
 
-type SourceToRoot = {
+export type SourceToRoot = {
   target?: EMPTY
 } & XorSource & XorTransform & MultipleSources & NoRemove
 
-type RootToTarget = {
+export type RootToTarget = {
   source?: EMPTY
   target: string | string[];
 } & XorTransform & NoMultipleSource & NoRemove
 
-type RootToRoot = {
+export type RootToRoot = {
   source?: EMPTY
   target?: EMPTY
 } & XorTransform & NoMultipleSource & NoRemove
 
-type SourceToTarget = {
+export type SourceToTarget = {
   target: string | string[];
 } & XorSource & XorTransform & MultipleSources & NoRemove
 
-type Remove = {
+export type Remove = {
   source?: EMPTY
   target?: EMPTY
   remove: string | string[];

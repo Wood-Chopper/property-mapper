@@ -1,6 +1,6 @@
-import {PostArrayMapping, ClassMapping, PostDateMapping, PostIgnore, PostMapping} from "./decorator";
+import {PostArrayMapping, ClassMapping, PostDateMapping, PostIgnore, PostMapping} from "./decorator.js";
 import {Observable, of} from "rxjs";
-import {AbstractMapper} from "./abstract-mapper";
+import {AbstractMapper} from "./abstract-mapper.js";
 
 describe('mapping', () => {
 

@@ -1,10 +1,10 @@
-import {ConcreteMapperType, MappingInstruction} from "./types";
-import {AbstractMapper} from "./abstract-mapper";
+import {ConcreteMapperType, MappingInstruction} from "./types.js";
+import {AbstractMapper} from "./abstract-mapper.js";
 import {map, Observable} from "rxjs";
-import {genericArrayMapper, genericMapper} from "./mapper";
-import {removeFirst} from "./utils";
+import {genericArrayMapper, genericMapper} from "./mapper.js";
+import {removeFirst} from "./utils.js";
 
-export function PostMapping(...mappings: MappingInstruction[] | [AbstractMapper<any, any>] | [ConcreteMapperType]) {
+export function PostMapping(...mappings: MappingInstruction[] | [AbstractMapper<any, any>] | [ConcreteMapperType]): Function {
   return function (
     target: any,
     propertyKey: string,
@@ -30,11 +30,11 @@ export function PostMapping(...mappings: MappingInstruction[] | [AbstractMapper<
   };
 }
 
-export function PostIgnore(...keys: string[]) {
+export function PostIgnore(...keys: string[]): Function {
   return PostMapping(...keys.map(v => ({ remove: v })))
 }
 
-export function PostArrayMapping(...mappings: MappingInstruction[] | [AbstractMapper<any, any>] | [ConcreteMapperType]) {
+export function PostArrayMapping(...mappings: MappingInstruction[] | [AbstractMapper<any, any>] | [ConcreteMapperType]): Function {
   return function (
     target: any,
     propertyKey: string,
@@ -60,11 +60,11 @@ export function PostArrayMapping(...mappings: MappingInstruction[] | [AbstractMa
   };
 }
 
-export function PostDateMapping(...targets: string[]) {
+export function PostDateMapping(...targets: string[]): Function {
   return PostMapping(...targets.map(target => ({ target: target, source: target, transform: (s: string | number | Date) => new Date(s) })));
 }
 
-export function ClassMapping(...mappings: MappingInstruction[]) {
+export function ClassMapping(...mappings: MappingInstruction[]): Function {
   return function <T extends ConcreteMapperType>(clazz: T) {
     return class extends clazz {
       override map(s: any, ...args: any[]): any {
