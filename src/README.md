@@ -1,4 +1,4 @@
-#Property mapper
+# Property mapper
 
 A solution to map structures in typescript Node projects. This solution provides decorators and types to make it easier to use.
 
@@ -37,3 +37,17 @@ userDetails.firstName is 'foo'
 userDetails.lastName is 'bar'
  */
 ```
+
+## Usage
+
+### Class mappers
+
+#### Basic usage
+
+#### With transformation
+
+#### Using another AbstractMapper as dependency
+
+#### Remove instruction
+
+### Post mappers

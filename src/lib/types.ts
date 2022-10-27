@@ -1,4 +1,4 @@
-import {AbstractMapper} from "./abstract-mapper.js";
+import {AbstractMapper} from "./abstract-mapper";
 
 export type ConcreteMapperType = {new(...args: any[]): AbstractMapper<any, any>};
 export type ConcreteMapper = AbstractMapper<any, any>;

@@ -1,5 +1,5 @@
 import {JSONPath} from "jsonpath-plus"
-import {AbstractMapper} from "./abstract-mapper.js";
+import {AbstractMapper} from "./abstract-mapper";
 import {
   ConcreteMapper,
   ConcreteMapperType,
@@ -8,8 +8,8 @@ import {
   RemoveOperation,
   RootMapping,
   SourceMapping
-} from "./types.js";
-import {removeFirst} from "./utils.js";
+} from "./types";
+import {removeFirst} from "./utils";
 
 export function genericMapper(sourceObject: any, buildingTarget: any, mappings: MappingInstruction[] | [AbstractMapper<any, any>] | [ConcreteMapperType], args: any[], contextClass: any = {}): any {
 

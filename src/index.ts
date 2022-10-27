@@ -1,6 +1,6 @@
-import { AbstractMapper } from "./lib/abstract-mapper.js";
-import { PostMapping, PostArrayMapping, ClassMapping, PostDateMapping, PostIgnore } from "./lib/decorator.js";
-import { Remove, RootToRoot, RootToTarget, SourceToRoot, SourceToTarget } from "./lib/types.js";
+import { AbstractMapper } from "./lib/abstract-mapper";
+import { PostMapping, PostArrayMapping, ClassMapping, PostDateMapping, PostIgnore } from "./lib/decorator";
+import { Remove, RootToRoot, RootToTarget, SourceToRoot, SourceToTarget } from "./lib/types";
 
 export { AbstractMapper }
 export { PostMapping, PostArrayMapping, ClassMapping, PostDateMapping, PostIgnore }

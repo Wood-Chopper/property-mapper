@@ -1,6 +1,5 @@
 {
   "scripts": {
-    "build": "cd src && npm ci && tsc",
     "test": "jest ./src/lib",
     "deploy-local": "cd src && tsc && cpx package.json dist && cd dist && yalc publish --push"
   },

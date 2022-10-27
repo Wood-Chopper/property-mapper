@@ -1,8 +1,8 @@
-import {ConcreteMapperType, MappingInstruction} from "./types.js";
-import {AbstractMapper} from "./abstract-mapper.js";
+import {ConcreteMapperType, MappingInstruction} from "./types";
+import {AbstractMapper} from "./abstract-mapper";
 import {map, Observable} from "rxjs";
-import {genericArrayMapper, genericMapper} from "./mapper.js";
-import {removeFirst} from "./utils.js";
+import {genericArrayMapper, genericMapper} from "./mapper";
+import {removeFirst} from "./utils";
 
 export function PostMapping(...mappings: MappingInstruction[] | [AbstractMapper<any, any>] | [ConcreteMapperType]): Function {
   return function (
