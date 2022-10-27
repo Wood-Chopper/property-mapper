@@ -100,8 +100,12 @@ function cleanMapping(mappings: MappingInstruction[], args: any[], mappers: Conc
 
     choosenMethod = choosenMethod && mapping.transformEach ? transformEach(choosenMethod) : choosenMethod;
     return ({...mapping,
-      target: isNotEmpty(mapping.target) ? toArrayPath(mapping.target) : undefined,
-      source: isEmpty(mapping.source) && isEmpty(mapping.multipleSources) ? '$' : mapping.source,
+      target: isNotEmpty(mapping.target) ? toArrayPath(mapping.target) : isNotEmpty(mapping.sourceTarget) ? toArrayPath(mapping.sourceTarget) : undefined,
+      source: isEmpty(mapping.source) && isEmpty(mapping.multipleSources) && isEmpty(mapping.sourceTarget) ?
+          '$' :
+          isNotEmpty(mapping.source) ?
+              mapping.source :
+              isNotEmpty(mapping.sourceTarget) ? mapping.sourceTarget : undefined,
       transform: choosenMethod
     }) as MappingInstruction
   });

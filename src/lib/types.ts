@@ -48,31 +48,39 @@ type EMPTY = never | '' | '$' | string[] | null | undefined;
 
 type NoRemove = { remove?: never }
 
+type NoSourceTarget = { sourceTarget?: never }
+
 export type SourceToRoot = {
   target?: EMPTY
-} & XorSource & XorTransform & MultipleSources & NoRemove
+} & XorSource & XorTransform & MultipleSources & NoRemove & NoSourceTarget
 
 export type RootToTarget = {
   source?: EMPTY
   target: string | string[];
-} & XorTransform & NoMultipleSource & NoRemove
+} & XorTransform & NoMultipleSource & NoRemove & NoSourceTarget
 
 export type RootToRoot = {
   source?: EMPTY
   target?: EMPTY
-} & XorTransform & NoMultipleSource & NoRemove
+} & XorTransform & NoMultipleSource & NoRemove & NoSourceTarget
 
 export type SourceToTarget = {
   target: string | string[];
-} & XorSource & XorTransform & MultipleSources & NoRemove
+} & XorSource & XorTransform & MultipleSources & NoRemove & NoSourceTarget
+
+export type SourceTarget = {
+  source?: EMPTY
+  target?: EMPTY
+  sourceTarget: string | string[]
+} & XorTransform & NoMultipleSource & NoRemove;
 
 export type Remove = {
   source?: EMPTY
   target?: EMPTY
   remove: string | string[];
-} & NoTransform
+} & NoTransform & NoSourceTarget;
 
-export type MappingInstruction = RootToRoot | SourceToTarget | SourceToRoot | RootToTarget | Remove;
+export type MappingInstruction = RootToRoot | SourceToTarget | SourceToRoot | RootToTarget | Remove | SourceTarget;
 
 export type ConsolidatedMapping = {
   [key: string]: RemoveOperation | MappingOperation | ConsolidatedMapping

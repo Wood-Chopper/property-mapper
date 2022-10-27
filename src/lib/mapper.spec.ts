@@ -1,4 +1,4 @@
-import {PostArrayMapping, ClassMapping, PostDateMapping, PostIgnore, PostMapping} from "./decorator";
+import {ArrayMapping, DateMapping, Ignore, Mapping} from "./decorator";
 import {Observable, of} from "rxjs";
 import {AbstractMapper} from "./abstract-mapper";
 
@@ -6,7 +6,7 @@ describe('mapping', () => {
 
   it('map date', () => {
     class DummyClass {
-      @PostMapping({ source: 'date', target: 'date', transform: (v) => new Date(v) })
+      @Mapping({ source: 'date', target: 'date', transform: (v) => new Date(v) })
       mapDate(input: any): any {
         return input;
       }
@@ -24,7 +24,7 @@ describe('mapping', () => {
 
   it('should reverse', () => {
     class DummyClass {
-      @PostMapping({ source: 'a', target: 'b' },
+      @Mapping({ source: 'a', target: 'b' },
         {source: 'b', target: 'a'})
       mapReversedKey(input: any): any {
         return input;
@@ -47,7 +47,7 @@ describe('mapping', () => {
   it('should handle method mapping', () => {
     class DummyClass {
 
-      @PostMapping({ source: 'a', target: 'b', transform: (v) => v + 1000 })
+      @Mapping({ source: 'a', target: 'b', transform: (v) => v + 1000 })
       mapReversedKey(input: any): any {
         return input;
       }
@@ -69,7 +69,7 @@ describe('mapping', () => {
   it('should handle root to root mapping', () => {
     class DummyClass {
 
-      @PostMapping({ transform: (v) => ({ b: v.a }) })
+      @Mapping({ transform: (v) => ({ b: v.a }) })
       mapRoot(input: any): any {
         return input;
       }
@@ -88,7 +88,7 @@ describe('mapping', () => {
 
   it('should handle nested mappings', () => {
     class DummyClass {
-      @PostMapping({ target: 'a.b', source: 'a'},
+      @Mapping({ target: 'a.b', source: 'a'},
         { target: 'a.c', source: 'b' })
       mapNestedTarget(input: any): any {
         return input;
@@ -113,7 +113,31 @@ describe('mapping', () => {
 
   it('shoud easily map date from props', () => {
     class DummyClass {
-      @PostDateMapping('creationDate', 'modificationDate')
+      @DateMapping('creationDate', 'modificationDate')
+      dateMapping(input: any): any {
+        return input;
+      }
+    }
+    const dummyClass = new DummyClass();
+    const input = {
+      creationDate: '2022-09-22T20:59:52Z',
+      modificationDate: '2022-09-22T20:59:52Z'
+    }
+
+    const output = dummyClass.dateMapping(input);
+
+    expect(output['creationDate'] instanceof Date).toBeTruthy();
+    expect(output['modificationDate'] instanceof Date).toBeTruthy();
+  })
+
+  it('shoud easily map date with custom mapper', () => {
+
+    @Mapping({transform: (v) => new Date(v)})
+    class DateMapper extends AbstractMapper<string, Date> {}
+
+    class DummyClass {
+      @Mapping({sourceTarget: 'creationDate', transform: DateMapper})
+      @Mapping({sourceTarget: 'modificationDate', transform: DateMapper})
       dateMapping(input: any): any {
         return input;
       }
@@ -132,7 +156,7 @@ describe('mapping', () => {
 
   it('should map observable responses', (done) => {
     class DummyClass {
-      @PostMapping({ target: 'a', source: 'b'})
+      @Mapping({ target: 'a', source: 'b'})
       asyncResponse(input: any): Observable<any> {
         return of(input);
       }
@@ -155,7 +179,7 @@ describe('mapping', () => {
 
   it('should map promise responses', (done) => {
     class DummyClass {
-      @PostMapping({ target: 'a', source: 'b'})
+      @Mapping({ target: 'a', source: 'b'})
       asyncResponse(input: any): Promise<any> {
         return Promise.resolve(input);
       }
@@ -178,7 +202,7 @@ describe('mapping', () => {
 
   it('should remove property if no mapping specified', () => {
     class DummyClass {
-      @PostMapping({remove: 'b'})
+      @Mapping({remove: 'b'})
       removeProperty(input: any): any {
         return input;
       }
@@ -198,7 +222,7 @@ describe('mapping', () => {
 
   it('should use root as source if no source specified', () => {
     class DummyClass {
-      @PostMapping({target: 'b'})
+      @Mapping({target: 'b'})
       removeProperty(input: any): any {
         return input;
       }
@@ -222,7 +246,7 @@ describe('mapping', () => {
 
   it('should map array', () => {
     class DummyClass {
-      @PostArrayMapping({ target: 'a', source: 'b'}, {remove: 'b'})
+      @ArrayMapping({ target: 'a', source: 'b'}, {remove: 'b'})
       arrayMapping(input: any[]): any[]{
         return input;
       }
@@ -242,7 +266,7 @@ describe('mapping', () => {
 
   it('should understand jsonPath expressions', () => {
     class DummyClass {
-      @PostMapping({ target: 'a', source: '$.a.b[1].c'})
+      @Mapping({ target: 'a', source: '$.a.b[1].c'})
       arrayExpression(input: any): any{
         return input;
       }
@@ -264,7 +288,7 @@ describe('mapping', () => {
 
   it('should understand jsonPath expressions with multiple result', () => {
     class DummyClass {
-      @PostMapping({ target: 'a', multipleSources: '$.a.b[0,1]'})
+      @Mapping({ target: 'a', multipleSources: '$.a.b[0,1]'})
       arrayExpression(input: any): any{
         return input;
       }
@@ -286,7 +310,7 @@ describe('mapping', () => {
 
   it('should understand array expressions', () => {
     class DummyClass {
-      @PostMapping({ target: 'a', source: 'a.b[1].c'})
+      @Mapping({ target: 'a', source: 'a.b[1].c'})
       arrayExpression(input: any): any{
         return input;
       }
@@ -309,7 +333,7 @@ describe('mapping', () => {
   it('should use additional args in method', () => {
     class DummyClass {
 
-      @PostMapping({ target: 'language', source: 'language', transform: (v, arg) => arg[v] })
+      @Mapping({ target: 'language', source: 'language', transform: (v, arg) => arg[v] })
       additionnalArgs(input: any, languageMapping: {[k: string]: string}): any {
         return input;
       }
@@ -328,12 +352,12 @@ describe('mapping', () => {
 
   it('should use injected mappers definition', () => {
 
-    @ClassMapping({ target: 'subA', source: 'subB' }, {remove: 'subB'})
+    @Mapping({ target: 'subA', source: 'subB' }, {remove: 'subB'})
     class OtherDummyClass extends AbstractMapper<any, any> {
 
     }
 
-    @ClassMapping({ target: 'a', source: 'b', transform: OtherDummyClass }, {remove: 'b'})
+    @Mapping({ target: 'a', source: 'b', transform: OtherDummyClass }, {remove: 'b'})
     class DummyClass extends AbstractMapper<any, any> {
       constructor(private otherDummyClass: OtherDummyClass) {
         super();
@@ -357,12 +381,12 @@ describe('mapping', () => {
 
   it('should use mapper implementation in transform', () => {
 
-    @ClassMapping({ target: 'subA', source: 'subB' }, {remove: 'subB'})
+    @Mapping({ target: 'subA', source: 'subB' }, {remove: 'subB'})
     class OtherDummyClass extends AbstractMapper<any, any> {
 
     }
 
-    @ClassMapping({ target: 'a', source: 'b', transform: new OtherDummyClass() }, {remove: 'b'})
+    @Mapping({ target: 'a', source: 'b', transform: new OtherDummyClass() }, {remove: 'b'})
     class DummyClass extends AbstractMapper<any, any> {
     }
     const dummyClass = new DummyClass();
@@ -383,10 +407,10 @@ describe('mapping', () => {
 
   it('should handle missing dependencies', () => {
 
-    @ClassMapping({ target: 'subA', source: 'subB' }, {remove: 'subB'})
+    @Mapping({ target: 'subA', source: 'subB' }, {remove: 'subB'})
     class OtherDummyClass extends AbstractMapper<any, any> {}
 
-    @ClassMapping({ target: 'a', source: 'b', transform: OtherDummyClass }, {remove: 'b'})
+    @Mapping({ target: 'a', source: 'b', transform: OtherDummyClass }, {remove: 'b'})
     class DummyClass extends AbstractMapper<any, any> {}
 
     const dummyClass = new DummyClass();
@@ -424,7 +448,7 @@ describe('mapping', () => {
       constructor(public selectedDummyClass: OtherDummyClass) {
       }
 
-      @PostMapping({ target: 'a', source: 'b', transform: OtherDummyClass }, {remove: 'b'})
+      @Mapping({ target: 'a', source: 'b', transform: OtherDummyClass }, {remove: 'b'})
       map(input: any): any {
         return input;
       }
@@ -448,12 +472,12 @@ describe('mapping', () => {
 
   it('should handle arrays with injected mappers definition', () => {
 
-    @ClassMapping({ target: 'subA', source: 'subB' }, {remove: 'subB'})
+    @Mapping({ target: 'subA', source: 'subB' }, {remove: 'subB'})
     class OtherDummyClass extends AbstractMapper<any, any> {
 
     }
 
-    @ClassMapping({ target: 'a', source: 'b', transformEach: OtherDummyClass }, {remove: 'b'})
+    @Mapping({ target: 'a', source: 'b', transformEach: OtherDummyClass }, {remove: 'b'})
     class DummyClass extends AbstractMapper<any, any> {
       constructor(private otherDummyClass: OtherDummyClass) {
         super();
@@ -485,7 +509,7 @@ describe('mapping', () => {
 
   it('should handle arrays with method mapping', () => {
 
-    @ClassMapping({ target: 'a', source: 'b', transformEach: (v) => ({subA: v['subB']}) }, {remove: 'b'})
+    @Mapping({ target: 'a', source: 'b', transformEach: (v) => ({subA: v['subB']}) }, {remove: 'b'})
     class DummyClass extends AbstractMapper<any, any> {}
 
     const dummyClass = new DummyClass();
@@ -514,10 +538,10 @@ describe('mapping', () => {
 
   it('should handle overriden mappers with extends', () => {
 
-    @ClassMapping({ target: 'parentProperty', source: 'parentPropertySource' }, {remove: 'parentPropertySource'})
+    @Mapping({ target: 'parentProperty', source: 'parentPropertySource' }, {remove: 'parentPropertySource'})
     class ParentClass extends AbstractMapper<ParentSource, Parent> {}
 
-    @ClassMapping({ target: 'childProperty', source: 'childPropertySource' }, {remove: 'childPropertySource'},
+    @Mapping({ target: 'childProperty', source: 'childPropertySource' }, {remove: 'childPropertySource'},
       { target: 'childProperty2', source: 'parentPropertySource' })
     class ChildClass extends ParentClass {}
 
@@ -555,11 +579,11 @@ describe('mapping', () => {
 
   it('should map by providing only AbstractMapper class definition', () => {
 
-    @ClassMapping({ target: 'target', source: 'source' }, {remove: 'source'})
+    @Mapping({ target: 'target', source: 'source' }, {remove: 'source'})
     class Mapper extends AbstractMapper<Source, Target> {}
 
     class RandomClass {
-      @PostMapping(Mapper)
+      @Mapping(Mapper)
       mapUsingOtherMapper(s: Source): Target {
         return s as unknown as Target;
       }
@@ -587,11 +611,11 @@ describe('mapping', () => {
 
   it('should map by providing only AbstractMapper implementation', () => {
 
-    @ClassMapping({ target: 'target', source: 'source' }, {remove: 'source'})
+    @Mapping({ target: 'target', source: 'source' }, {remove: 'source'})
     class Mapper extends AbstractMapper<Source, Target> {}
 
     class RandomClass {
-      @PostMapping(new Mapper())
+      @Mapping(new Mapper())
       mapUsingOtherMapper(s: Source): Target {
         return s as unknown as Target;
       }
@@ -619,34 +643,34 @@ describe('mapping', () => {
 
   it('should get the exact same results when giving minimal mappings info', () => {
 
-    @ClassMapping({ transform: (v) => ({ b: v.a }) })
+    @Mapping({ transform: (v) => ({ b: v.a }) })
     class DummyMapper extends AbstractMapper<any, any> {
 
     }
 
     class DummyClass {
 
-      @PostMapping({ transform: (v) => ({ b: v.a }) })
+      @Mapping({ transform: (v) => ({ b: v.a }) })
       transform(input: any): any {
         return input;
       }
-      @PostMapping({ source: '', transform: (v) => ({ b: v.a }) })
+      @Mapping({ source: '', transform: (v) => ({ b: v.a }) })
       transformSource(input: any): any {
         return input;
       }
-      @PostMapping({ target: '', transform: (v) => ({ b: v.a }) })
+      @Mapping({ target: '', transform: (v) => ({ b: v.a }) })
       transformTarget(input: any): any {
         return input;
       }
-      @PostMapping({ source: '', target: '', transform: (v) => ({ b: v.a }) })
+      @Mapping({ source: '', target: '', transform: (v) => ({ b: v.a }) })
       transformSourceTarget(input: any): any {
         return input;
       }
-      @PostMapping(new DummyMapper())
+      @Mapping(new DummyMapper())
       classInstance(input: any): any {
         return input;
       }
-      @PostMapping(DummyMapper)
+      @Mapping(DummyMapper)
       classType(input: any): any {
         return input;
       }
@@ -674,8 +698,8 @@ describe('mapping', () => {
   });
 
   it('should reverse with multiple annotations', () => {
-    @ClassMapping({source: 'a', target: 'b'})
-    @ClassMapping({source: 'b', target: 'a'})
+    @Mapping({source: 'a', target: 'b'})
+    @Mapping({source: 'b', target: 'a'})
     class DummyClass extends AbstractMapper<any, any> {}
     const dummyClass = new DummyClass();
     const input = {
@@ -691,10 +715,26 @@ describe('mapping', () => {
     })
   });
 
+  it('should ignore properties with @Ignore on AbstractMapper', () => {
+    @Mapping({source: 'b', target: 'a'})
+    @Ignore('b')
+    class DummyClass extends AbstractMapper<any, any> {}
+    const dummyClass = new DummyClass();
+    const input = {
+      b: 2
+    }
+
+    const output = dummyClass.map(input);
+
+    expect(output).toEqual({
+      a: 2
+    })
+  });
+
   it('should ignore when multiple annotations', () => {
     class DummyClass {
-      @PostIgnore('b')
-      @PostMapping({source: 'a', target: 'a', transform: (v) => v + 1000})
+      @Ignore('b')
+      @Mapping({source: 'a', target: 'a', transform: (v) => v + 1000})
       mapReversedKey(input: any): any {
         return input;
       }
