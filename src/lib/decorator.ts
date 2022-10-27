@@ -30,17 +30,17 @@ function postMappingOnDescriptorArray(descriptor: PropertyDescriptor, mappings: 
     let originalResponse = oldMethod(...args);
     if (originalResponse instanceof Observable) {
       return originalResponse.pipe(
-          map(obj => genericArrayMapper(obj, obj, mappings as MappingInstruction[], removeFirst(args)))
+          map(obj => genericArrayMapper(obj, obj, mappings as MappingInstruction[], removeFirst(args), this))
       );
     }
     if (originalResponse instanceof Promise) {
       return new Promise((resolve, reject) => {
         return (originalResponse as Promise<any>)
-            .then(obj => resolve(genericArrayMapper(obj, obj, mappings as MappingInstruction[], removeFirst(args))))
+            .then(obj => resolve(genericArrayMapper(obj, obj, mappings as MappingInstruction[], removeFirst(args), this)))
             .catch(reason => reject(reason))
       })
     }
-    return genericArrayMapper(originalResponse, originalResponse, mappings as MappingInstruction[], removeFirst(args));
+    return genericArrayMapper(originalResponse, originalResponse, mappings as MappingInstruction[], removeFirst(args), this);
   };
 }
 
