@@ -4,43 +4,29 @@ import {map, Observable} from "rxjs";
 import {genericArrayMapper, genericMapper} from "./mapper";
 import {removeFirst} from "./utils";
 
+function mapObjectOrArray(sourceObject: any, buildingTarget: any, mappings: MappingInstruction[] | [AbstractMapper<any, any>] | [ConcreteMapperType], args: any[], contextClass: any = {}) {
+  return sourceObject instanceof Array ?
+      genericArrayMapper(sourceObject, buildingTarget, mappings, args, contextClass) :
+      genericMapper(sourceObject, buildingTarget, mappings, args, contextClass)
+}
+
 function postMappingOnDescriptor(descriptor: PropertyDescriptor, mappings: MappingInstruction[] | [AbstractMapper<any, any>] | [ConcreteMapperType]) {
   const oldMethod = descriptor.value;
   descriptor.value = function (...args: any[]) {
     let originalResponse = oldMethod(...args);
     if (originalResponse instanceof Observable) {
       return originalResponse.pipe(
-          map(obj => genericMapper(obj, obj, mappings, removeFirst(args), this))
+          map(obj => mapObjectOrArray(obj, obj, mappings, removeFirst(args), this))
       );
     }
     if (originalResponse instanceof Promise) {
       return new Promise((resolve, reject) => {
         return (originalResponse as Promise<any>)
-            .then(obj => resolve(genericMapper(obj, obj, mappings, removeFirst(args), this)))
+            .then(obj => resolve(mapObjectOrArray(obj, obj, mappings, removeFirst(args), this)))
             .catch(reason => reject(reason))
       })
     }
-    return genericMapper(originalResponse, originalResponse, mappings, removeFirst(args), this);
-  };
-}
-
-function postMappingOnDescriptorArray(descriptor: PropertyDescriptor, mappings: MappingInstruction[] | [AbstractMapper<any, any>] | [ConcreteMapperType]) {
-  const oldMethod = descriptor.value;
-  descriptor.value = function (...args: any[]) {
-    let originalResponse = oldMethod(...args);
-    if (originalResponse instanceof Observable) {
-      return originalResponse.pipe(
-          map(obj => genericArrayMapper(obj, obj, mappings as MappingInstruction[], removeFirst(args), this))
-      );
-    }
-    if (originalResponse instanceof Promise) {
-      return new Promise((resolve, reject) => {
-        return (originalResponse as Promise<any>)
-            .then(obj => resolve(genericArrayMapper(obj, obj, mappings as MappingInstruction[], removeFirst(args), this)))
-            .catch(reason => reject(reason))
-      })
-    }
-    return genericArrayMapper(originalResponse, originalResponse, mappings as MappingInstruction[], removeFirst(args), this);
+    return mapObjectOrArray(originalResponse, originalResponse, mappings, removeFirst(args), this);
   };
 }
 
@@ -63,7 +49,7 @@ export function DateMapping(...targets: string[]): Function {
 
 export function Mapping(...mappings: MappingInstruction[] | [AbstractMapper<any, any>] | [ConcreteMapperType]): Function {
   return function (
-      target: any | ConcreteMapperType,
+      target: { constructor: Function } | ConcreteMapperType,
       propertyKey?: string,
       descriptor?: PropertyDescriptor
   ) {
@@ -73,14 +59,4 @@ export function Mapping(...mappings: MappingInstruction[] | [AbstractMapper<any,
       postMappingOnDescriptor(descriptor as PropertyDescriptor, mappings);
     }
   }
-}
-
-export function ArrayMapping(...mappings: MappingInstruction[] | [AbstractMapper<any, any>] | [ConcreteMapperType]): Function {
-  return function (
-      target: any,
-      propertyKey: string,
-      descriptor: PropertyDescriptor
-  ) {
-    postMappingOnDescriptorArray(descriptor, mappings);
-  };
 }

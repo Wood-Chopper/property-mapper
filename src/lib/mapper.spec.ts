@@ -1,4 +1,4 @@
-import {ArrayMapping, DateMapping, Ignore, Mapping} from "./decorator";
+import {DateMapping, Ignore, Mapping} from "./decorator";
 import {Observable, of} from "rxjs";
 import {AbstractMapper} from "./abstract-mapper";
 
@@ -246,7 +246,7 @@ describe('mapping', () => {
 
   it('should map array', () => {
     class DummyClass {
-      @ArrayMapping({ target: 'a', source: 'b'}, {remove: 'b'})
+      @Mapping({ target: 'a', source: 'b'}, {remove: 'b'})
       arrayMapping(input: any[]): any[]{
         return input;
       }
