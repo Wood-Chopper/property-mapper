@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "jest ./src/lib",
+    "test": "cd src && npm install && cd .. && jest ./src/lib",
     "deploy-local": "cd src && tsc && cpx package.json dist && cpx ../README.md dist && cd dist && yalc publish --push"
   },
   "author": "navez.jerome@gmail.com",
