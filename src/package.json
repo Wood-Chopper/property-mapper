@@ -1,7 +1,7 @@
 {
   "name": "@woodchopper/property-mapper",
-  "description": "A solution to map structures in typescript Node projects. This solution provides decorators and types to make it easier to use.",
-  "version": "0.0.2",
+  "description": "A solution to map structures in TypeScript Node projects. This solution provides decorators and types to make it easier to use.",
+  "version": "0.0.3",
   "author": "navez.jerome@gmail.com",
   "homepage": "https://github.com/Wood-Chopper/property-mapper",
   "bugs": {

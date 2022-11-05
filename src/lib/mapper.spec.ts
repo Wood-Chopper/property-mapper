@@ -1,6 +1,7 @@
 import {DateMapping, Ignore, Mapping} from "./decorator";
 import {Observable, of} from "rxjs";
 import {AbstractMapper} from "./abstract-mapper";
+import * as assert from "assert";
 
 describe('mapping', () => {
 
@@ -751,5 +752,34 @@ describe('mapping', () => {
       a: 1001
     })
   });
+
+  it('should be possible to map on cjasses that uses dependencies', () => {
+    class Dependency {
+      dependencyMethod(): any {
+        return {
+          a: 1
+        }
+      }
+    }
+
+    class MyClass {
+      constructor(public dependency: Dependency) {
+        console.log('construct');
+      }
+
+      @Mapping({ sourceTarget: 'a', transform: (v) => v + 1 })
+      map(): any {
+        return this.dependency.dependencyMethod();
+      }
+    }
+
+    const myClass = new MyClass(new Dependency());
+
+    const output = myClass.map();
+
+    expect(output).toEqual({
+      a: 2
+    })
+  })
 
 });

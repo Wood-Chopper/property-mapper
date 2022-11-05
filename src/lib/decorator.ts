@@ -13,7 +13,7 @@ function mapObjectOrArray(sourceObject: any, buildingTarget: any, mappings: Mapp
 function postMappingOnDescriptor(descriptor: PropertyDescriptor, mappings: MappingInstruction[] | [AbstractMapper<any, any>] | [ConcreteMapperType]) {
   const oldMethod = descriptor.value;
   descriptor.value = function (...args: any[]) {
-    let originalResponse = oldMethod(...args);
+    let originalResponse = oldMethod.bind(this).apply(...args);
     if (originalResponse instanceof Observable) {
       return originalResponse.pipe(
           map(obj => mapObjectOrArray(obj, obj, mappings, removeFirst(args), this))
